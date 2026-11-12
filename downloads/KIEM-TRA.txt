@@ -1,0 +1,17 @@
+﻿AutoWheel 1.0 — Kiểm tra trước khi giao
+
+Đã thực hiện:
+- Build Windows x64 bằng Zig 0.14.1, C11, -Wall -Wextra -Werror.
+- Xác nhận PE AMD64, subsystem Windows GUI.
+- Manifest asInvoker, uiAccess=false: không yêu cầu Administrator.
+- Import chuẩn Windows và UCRT. Không có OpenProcess, ReadProcessMemory,
+  WriteProcessMemory, VirtualAllocEx, CreateRemoteThread hoặc hook chuột/bàn phím.
+- 12 kiểm thử logic vượt qua GCC với AddressSanitizer/UndefinedBehaviorSanitizer:
+  bật/tắt, nhả/giữ nút, mất focus, chuột ra ngoài, nhịp1..1000ms, không gửi dồn.
+- Rà soát mã tích hợp và kiểm tra gói phân phối không chứa DLL/EXE cũ.
+
+Giới hạn:
+- Chưa chạy giao diện trên Windows, chưa thử trong game/Xigncode.
+- Không bảo đảm nhận cuộn trong game, không bị phát hiện, không bị kick/ban.
+- Khoảng1ms là yêu cầu nhịp gửi; không phải kết quả đo độ trễ thực.
+- EXE chưa ký số. Không cần tắt bảo vệ hệ thống để sử dụng.
