@@ -1,17 +1,20 @@
-﻿AutoWheel 1.0 — Kiểm tra trước khi giao
+﻿AutoWheel 1.1 — Home kích hoạt, bấm chuột bật/tắt
 
 Đã thực hiện:
 - Build Windows x64 bằng Zig 0.14.1, C11, -Wall -Wextra -Werror.
-- Xác nhận PE AMD64, subsystem Windows GUI.
-- Manifest asInvoker, uiAccess=false: không yêu cầu Administrator.
-- Import chuẩn Windows và UCRT. Không có OpenProcess, ReadProcessMemory,
-  WriteProcessMemory, VirtualAllocEx, CreateRemoteThread hoặc hook chuột/bàn phím.
-- 12 kiểm thử logic vượt qua GCC với AddressSanitizer/UndefinedBehaviorSanitizer:
-  bật/tắt, nhả/giữ nút, mất focus, chuột ra ngoài, nhịp1..1000ms, không gửi dồn.
-- Rà soát mã tích hợp và kiểm tra gói phân phối không chứa DLL/EXE cũ.
+- PE AMD64, subsystem Windows GUI, version 1.1.0.0.
+- Manifest asInvoker/uiAccess=false; không yêu cầu Administrator.
+- Chỉ đăng ký một phím tắt toàn cục: Home.
+- Chuột giữa, X1, X2: bấm để bật/tắt; thả vẫn cuộn, giữ không lặp bật/tắt.
+- 18 test logic passed với GCC strict warnings và ASan/UBSan:
+  mask chuột, phối hợp nút, click bật/tắt, giữ/thả, Home kích hoạt lại,
+  chuột ra ngoài, mất focus, nhịp 1..1000ms, không gửi dồn.
+- Rà soát tích hợp, kiểm tra import không có API truy cập bộ nhớ/tiêm mã.
+- ZIP chỉ có ứng dụng mới, tài liệu, checksum và source; không có DLL cũ.
 
 Giới hạn:
 - Chưa chạy giao diện trên Windows, chưa thử trong game/Xigncode.
-- Không bảo đảm nhận cuộn trong game, không bị phát hiện, không bị kick/ban.
-- Khoảng1ms là yêu cầu nhịp gửi; không phải kết quả đo độ trễ thực.
-- EXE chưa ký số. Không cần tắt bảo vệ hệ thống để sử dụng.
+- Không bảo đảm game nhận đầu vào, không bị phát hiện hoặc không bị kick/ban.
+- 1 ms là nhịp yêu cầu, không phải kết quả đo thực tế.
+- Macro chuột phải phát sự kiện Middle/X1/X2 chuẩn Windows để được nhận.
+- EXE chưa ký số; không cần tắt bảo vệ để ép chạy.

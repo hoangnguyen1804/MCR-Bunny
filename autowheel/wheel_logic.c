@@ -24,7 +24,7 @@ bool wheel_arm(WheelState *state, uintptr_t target, unsigned interval_ms)
 }
 
 bool wheel_tick(WheelState *state, uint64_t now_us,
-                bool foreground_matches, bool cursor_matches, bool held)
+                bool foreground_matches, bool cursor_matches, uint32_t buttons)
 {
     if (state == 0 || !state->armed) {
         return false;
@@ -34,18 +34,26 @@ bool wheel_tick(WheelState *state, uint64_t now_us,
         return false;
     }
     if (!cursor_matches) {
+        state->scrolling = false;
         state->waiting_release = true;
+        state->previous_buttons = buttons;
         state->emitted = false;
         return false;
     }
     if (state->waiting_release) {
-        if (!held) {
+        if (buttons == 0) {
             state->waiting_release = false;
         }
+        state->previous_buttons = buttons;
         return false;
     }
-    if (!held) {
+    const uint32_t new_presses = buttons & ~state->previous_buttons;
+    state->previous_buttons = buttons;
+    if (new_presses != 0) {
+        state->scrolling = !state->scrolling;
         state->emitted = false;
+    }
+    if (!state->scrolling) {
         return false;
     }
     if (state->emitted) {
